@@ -1,8 +1,73 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model List<TechnoCinema.Models.Banner>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="banner-container">
+    <div class="slider">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <div class="slide @(i == 0 ? "active" : "")">
+                <a href="@Model[i].TargetUrl">
+                    <img src="@Model[i].ImageUrl" alt="@Model[i].Name" />
+                </a>
+            </div>
+        }
+    </div>
 </div>
+
+<style>
+    .banner-container {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .slider {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+body {
+        background-image: url('/images/seansback.jpg');
+        background-size: cover; /* cover the entire viewport */
+        background-position: center; /* center the image */
+        background-repeat: no-repeat; /* don’t tile */
+        background-attachment: fixed; /* keeps it fixed when scrolling */
+        font-family: Arial, sans-serif; /* optional styling */
+    }
+
+</style>
+
+
+
+
+<script>
+    let slides = document.querySelectorAll(".slide");
+    let index = 0;
+
+    if (slides.length > 0) {
+        setInterval(() => {
+            slides[index].classList.remove("active");
+            index = (index + 1) % slides.length;
+            slides[index].classList.add("active");
+        }, 4000);
+    }
+</script>

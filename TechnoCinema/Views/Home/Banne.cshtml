@@ -1,0 +1,34 @@
+﻿@model List<TechnoCinema.Models.Banner>
+
+<h2>All Banners</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Target URL</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var banner in Model)
+        {
+            <tr>
+                <td>@banner.Position</td>
+                <td>@banner.Name</td>
+                <td>
+                    <img src="@banner.ImageUrl" alt="@banner.Name" width="150" />
+                </td>
+                <td>@banner.TargetUrl</td>
+                <td>
+                    <a asp-action="Remove" asp-route-id="@banner.Id" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure you want to remove this banner?');">
+                        Remove
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

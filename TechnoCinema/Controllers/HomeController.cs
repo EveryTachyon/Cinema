@@ -1,32 +1,21 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using TechnoCinema.Data;
 using TechnoCinema.Models;
 
-namespace TechnoCinema.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public HomeController(ApplicationDbContext context)
     {
-        private readonly ILogger<HomeController> _logger;
+        _context = context;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    // Home page: show banners
+    public IActionResult Index()
+    {
+        var banners = _context.Banners.OrderBy(b => b.Position).ToList();
+        return View(banners);
     }
 }

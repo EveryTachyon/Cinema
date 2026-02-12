@@ -49,6 +49,9 @@
 
 
 <style>
+
+
+    /* card css  */
     .seans-card {
         border-radius: 10px;
         overflow: hidden;
@@ -86,6 +89,7 @@
         .seans-card span {
             font-size: 0.9rem;
         }
+    /*  ends */
 
     .pagination-container {
         margin-top: 20px;
@@ -117,9 +121,9 @@
             background-color: orange; /* current page is orange */
             color: white;
         }
+                                                                                        
 
-
-
+    /*  back  image */
     body {
         background-image: url('/images/seansback.jpg');
         background-size: cover; /* cover the entire viewport */
@@ -132,80 +136,3 @@
 </style>
 
 
-
-
-<h2>Seansiajad</h2>
-<!-- do the seans and the creat html and CSS good do views -->
-<div class="row">
-    @foreach (var seans in Model)
-    {
-        <div class="col-md-6 mb-4">
-            <div class="card seans-card">
-                <!-- aad this when u clik on the name u go do the diteils -->
-                <div class="card-header text-white text-center">
-                    @seans.Film
-                </div>
-
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h3>@seans.ReleaseDate.ToShortTimeString()</h3>
-                        <!-- butten for buy a ticket/piletid -->
-                        <a asp-controller="Buy" asp-action="Index" asp-route-id="@seans.Id" class="btn btn-warning">
-                            Osta pileteid
-                        </a>
-
-                    </div>
-                    <p>KinoNimi: @seans.KinoNimi</p>
-                    <p>Saal: @seans.Saal</p>
-                    <div class="d-flex justify-content-between">
-                        <span>Vabu kohti: @seans.VabuKohti</span>
-                        <span>Kuupäev: @seans.ReleaseDate.ToShortDateString()</span>
-                        <span>Formaat: @seans.Formaat</span>
-                        <span>Keel: @seans.Keel</span>
-                        <span>Subtiitrid: @seans.Subtiitrid</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    <!-- CSS down do -->
-</div>
-<style>
-    .seans-card {
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-        .seans-card .card-header {
-            background-color: #6a1b9a;
-            font-weight: bold;
-            color: white;
-            font-size: 1.2rem;
-            padding: 0.5rem;
-        }
-
-        .seans-card .card-body {
-            background-color: #fff;
-            padding: 1rem;
-        }
-
-        .seans-card .btn-warning {
-            background-color: #f57c00;
-            border: none;
-            color: white;
-        }
-
-        .seans-card h3 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        .seans-card p {
-            margin-bottom: 0.3rem;
-        }
-
-        .seans-card span {
-            font-size: 0.9rem;
-        }
-</style>
