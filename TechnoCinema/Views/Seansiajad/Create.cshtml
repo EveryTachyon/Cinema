@@ -1,0 +1,55 @@
+﻿@model TechnoCinema.Models.Showtime
+<!-- last modifite list   -->
+<!-- dealite the seans   -->
+<!-- modifiai the seanas -->
+<!-- to the base for the aad seans   -->
+<!-- mage some basee AI for the auto whatse time create -->
+
+<h2>Lisa uus seanss</h2>
+
+<form asp-action="Create" method="post">
+    <!-- lock if the names is good for admin  -->
+    <div class="form-group">
+        <label>Kino Nimi</label>
+        <input asp-for="KinoNimi" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Saal</label>
+        <input asp-for="Saal" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Kuupäev</label>
+        <input asp-for="ReleaseDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Formaat</label>
+        <input asp-for="Formaat" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Keel</label>
+        <input asp-for="Keel" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Subtiitrid</label>
+        <input asp-for="Subtiitrid" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Vabu Kohti</label>
+        <input asp-for="VabuKohti" type="number" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Film</label>
+        <input asp-for="Film" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Salvesta</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Tagasi</a>
+
+</form>

@@ -1,0 +1,51 @@
+﻿@model TechnoCinema.Models.Showtime
+
+
+<form asp-action="Edit" method="post">
+    <!-- REQUIRED for editing -->
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label>Kino Nimi</label>
+        <input asp-for="KinoNimi" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Saal</label>
+        <input asp-for="Saal" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Kuupäev</label>
+        <input asp-for="ReleaseDate" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Formaat</label>
+        <input asp-for="Formaat" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Keel</label>
+        <input asp-for="Keel" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Subtiitrid</label>
+        <input asp-for="Subtiitrid" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Vabu Kohti</label>
+        <input asp-for="VabuKohti" type="number" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Film</label>
+        <input asp-for="Film" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Salvesta muudatused</button>
+
+    <a asp-action="EditedList" class="btn btn-secondary mt-3">Tagasi</a>
+</form>

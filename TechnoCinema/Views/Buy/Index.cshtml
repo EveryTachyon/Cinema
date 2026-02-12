@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Seat Selection";
+}
+
+<h1>Select Your Seat</h1>
+
+<style>
+    body {
+        background-color:  rebeccapurple;
+        color: black;
+    }
+    .container {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .seat-grid {
+        display: grid;
+        grid-template-columns: repeat(8, 50px);
+        grid-template-rows: repeat(8, 50px);
+        gap: 10px;
+    }
+
+    .side-btn {
+        width: 100px;
+        height: 50px;
+        background-color: #f57c00;
+        border: 2px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .seat-bt {
+        width: 50px;
+        height: 50px;
+        background-color: white;
+        border: 1px solid #888;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .seat-btn.selected {
+            background-color: yellow;
+    }
+
+    .seat-btn.confirmed {
+            background-color: red;
+            cursor: default;
+    }
+
+    .side-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .back-btn {
+        position: absolute;
+        left: 0rem;
+        width: 100px;
+        height: 50px; 
+        margin-left: 50px;
+        background-color: #f57c00;
+        border: 2px solid black;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+</style>
+
+<div class="container">
+    <div class="seat-grid">
+        @for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                <button type="button" class="seat-btn" data-seat="@($"{(char)('A' + row)}{col + 1}")">
+                    @($"{(char)('A' + row)}{col + 1}")
+                </button>
+            }
+        }
+    </div>
+    <div class="side-buttons">
+        <button type="button" id="adminBtn" class="side-btn">Admin</button>
+        <button type="button" id="confirmBtn" class="side-btn">Confirm</button>
+    </div>
+    <div class="back-button">
+        <button type="button" onclick="history.back()" id="backBtn" class="back-btn">Back</button>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.seat-btn, .side-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            if (button.classList.contains('confirmed')) return; // Don't change confirmed buttons
+            button.classList.toggle('selected');
+        });
+    });
+
+    document.getElementById('confirmBtn').addEventListener('click', () => {
+        // Turn all selected seats and admin to confirmed red
+        document.querySelectorAll('.selected').forEach(button => {
+            button.classList.remove('selected');
+            button.classList.add('confirmed');
+        });
+    });
+
+    document.getElementById('adminBtn').addEventListener('click', () => {
+        document.querySelectorAll('.seat-btn, .side-btn').forEach(button => {
+            button.classList.remove('selected', 'confirmed');
+        });
+    });
+</script>

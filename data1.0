@@ -1,0 +1,35 @@
+INSERT INTO Showtimes
+(Id, KinoNimi, Saal, ReleaseDate, Formaat, Keel, Subtiitrid, VabuKohti, Film)
+VALUES
+(1, 'Apollo Kino', '2', '2025-01-01 10:00:00', '2D', 'Inglise', 'Eesti', 35, 'Uma Musume Beginning of a New Era'),
+(2, 'Apollo Kino', '3', '2025-01-02 00:00:00', '2D', 'Inglise', 'Eesti', 35, 'Uma Musume Beginning of a New Era'),
+(3, 'Apollo Kino', '1', '2025-01-01', '3D', 'Eesti', 'Inglise', 50, 'Frieren'),
+(4, 'Apollo Kino', '1', '2025-01-01 09:45:00', '3D', 'Eesti', 'Inglise', 50, 'Frieren'),
+(5, 'Apollo Kino', '1', '2025-01-01 18:30:00', '3D', 'Eesti', 'Inglise', 50, 'Frieren'),
+(6, 'Apollo Kino', '1', '2025-01-02 10:00:00', '2D', 'Inglise', 'Eesti', 35, 'Uma Musume Beginning of a New Era'),
+(7, 'Cinamon', '2', '2025-01-03 20:15:00', '3D', 'Eesti', 'Inglise', 50, 'Frieren');
+
+
+
+INSERT INTO movies 
+(Title, DurationSeconds, Genres, AgeRating, Language, Subtitles, Rating, ImageUrl, TrailerUrl)
+VALUES
+('Inception', 8880, '["Sci-Fi", "Thriller"]', '13+', 'English', '["English", "Spanish"]', 8.8,
+ 'https://m.media-amazon.com/images/I/91b3Xtjt0IL.jpg',
+ 'https://youtube.com/watch?v=YoHD9XEInc0'),
+
+('The Lion King', 5340, '["Animation", "Adventure"]', 'U', 'English', '["English", "French"]', 8.5,
+ 'https://m.media-amazon.com/images/I/71tvsmgNjeL._AC_UF894,1000_QL80_.jpg',
+ 'https://youtube.com/watch?v=7TavVZMewpY'),
+
+('Avengers: Endgame', 10860, '["Action", "Superhero"]', '13+', 'English', '["English", "Hindi"]', 8.4,
+ 'https://m.media-amazon.com/images/I/81ExhpBEbHL._AC_SY679_.jpg',
+ 'https://youtube.com/watch?v=TcMBFSGVi1c'),
+
+('Parasite', 7920, '["Drama", "Thriller"]', '18+', 'Korean', '["English"]', 8.6,
+ 'https://www.impawards.com/intl/south_korea/2019/parasite_ver2.html',
+ 'https://youtube.com/watch?v=5xH0HfJHsaY'),
+
+('3 Idiots', 10200, '["Comedy", "Drama"]', 'U', 'Hindi', '["English"]', 8.4,
+ 'https://www.goldposter.com/17584/full/',
+ 'https://youtube.com/watch?v=K0eDlFX9GMc');

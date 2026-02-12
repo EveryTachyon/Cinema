@@ -1,0 +1,40 @@
+﻿<h>EditedList</h>
+
+<form method="get" class="mb-3">
+    <input type="text" name="searchString" placeholder="Otsi filmi"
+           value="@ViewBag.SearchString" class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Otsi</button>
+</form>
+
+<div class="row">
+    @foreach (var seans in Model)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card seans-card">
+                <div class="card-header text-white text-center">
+                    @seans.Film
+                </div>
+
+                <div class="card-body">
+
+                    <p>Name: @seans.Film</p>
+                    <p>Kino: @seans.KinoNimi</p>
+                    <p>Saal: @seans.Saal</p>
+                    <p>Kuupäev: @seans.ReleaseDate.ToShortDateString()</p>
+                    <p>Formaat: @seans.Formaat</p>
+                    <p>Keel: @seans.Keel</p>
+                    <p>Subtiitrid: @seans.Subtiitrid</p>
+
+
+                    <a asp-action="Edit2"
+                       asp-route-id="@seans.Id"
+                       class="btn btn-warning">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Tagasi</a>

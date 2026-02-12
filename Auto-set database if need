@@ -1,0 +1,38 @@
+// works like sqllite //
+
+// build on //
+Microsoft.EntityFrameworkCore.Sqlite
+
+// Program.cs //
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite("Data Source=cinema.db"));
+
+
+// how to set the data be it self //
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Movie>().HasData(
+        new Movie { Id = 1, Title = "Inception" },
+        new Movie { Id = 2, Title = "Interstellar" }
+    );
+}
+
+// If u need do hashed the data like User Passwords // 
+
+Use ASP.NET Identity.
+builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+Prevent database access / tampering
+
+// data locally protekting  // 
+Obfuscation
+Rename DB file:
+cinema.db → data.bin
+SQLite encryption 
+Use SQLCipher:
+Microsoft.Data.Sqlite.Core
+options.UseSqlite("Data Source=data.bin;Password=StrongKey;");
+
+
+

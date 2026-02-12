@@ -1,0 +1,195 @@
+﻿@model IEnumerable<TechnoCinema.Models.Movie>
+@using System.Collections.Generic
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@removeTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    // Get data from ViewData
+    var searchTitle = ViewData["SearchTitle"] as string ?? "";
+    var sortBy = ViewData["SortBy"] as string ?? "";
+    var selectedGenres = ViewData["SelectedGenres"] as List<string> ?? new List<string>();
+    var allGenres = ViewData["AllGenres"] as List<string> ?? new List<string>();
+}
+
+<div class="container py-5">
+
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Now Showing</h1>
+        <p class="lead text-muted">Browse the latest movies playing in our cinema.</p>
+    </div>
+
+    <!-- Search / Sort Form -->
+   <form method="get" class="row mb-4 g-2 justify-content-center">
+
+    <!-- Title Search -->
+    <div class="col-12 col-md-4">
+        <input type="text"
+               name="searchTitle"
+               value="@searchTitle"
+               class="form-control"
+               placeholder="Search by title..." />
+    </div>
+
+        <!-- Genre Multi-Select Dropdown -->
+        <div class="col-12 col-md-4">
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle w-100"
+                        type="button"
+                        id="genreDropdown"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    @if (selectedGenres.Any())
+                    {
+                        @string.Join(", ", selectedGenres)
+                    }
+                    else
+                    {
+                        <text>Select genres</text>
+                    }
+                </button>
+                <ul class="dropdown-menu p-3" aria-labelledby="genreDropdown" style="max-height: 200px; overflow-y: auto;">
+                    @foreach (var genre in allGenres)
+                    {
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="selectedGenres"
+                                       value="@genre"
+                                       id="genre_@genre"
+                                       @if (selectedGenres.Contains(genre))
+                                       {
+                                    <text>checked</text>
+                                }
+     />
+                                <label class="form-check-label" for="genre_@genre">@genre</label>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+
+    <!-- Sort Dropdown -->
+    <div class="col-12 col-md-3">
+@{
+    var options = new List<(string value, string text)> {
+        ("", "No sorting"),
+        ("RatingDesc", "Rating: High → Low"),
+        ("RatingAsc", "Rating: Low → High")
+    };
+}
+
+<select name="sortBy" class="form-select" asp-items="null">
+    @foreach (var opt in options)
+    {
+        <option value="@opt.value" 
+            @if(sortBy == opt.value){<text>selected</text>}>
+            @opt.text
+        </option>
+    }
+</select>
+
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-12 col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Apply</button>
+    </div>
+
+</form>
+
+
+    <!-- Movie Cards -->
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center text-muted">
+            <p>No movies are currently available.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var movie in Model)
+            {
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="card h-100 shadow-sm border-0">
+
+                        @if (!string.IsNullOrWhiteSpace(movie.ImageUrl))
+                        {
+                            <img src="@movie.ImageUrl"
+                                 class="card-img-top"
+                                 alt="@movie.Title poster" />
+                        }
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title mb-2">@movie.Title</h5>
+
+                            <div class="mb-2 small text-muted">
+                                <span class="me-2">⏱ @(movie.DurationSeconds / 60) min</span>
+                                @if (!string.IsNullOrWhiteSpace(movie.Language))
+                                {
+                                    <span class="me-2">🌐 @movie.Language</span>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(movie.AgeRating))
+                                {
+                                    <span class="badge bg-dark">@movie.AgeRating</span>
+                                }
+                            </div>
+
+                            @if ((movie.Genres ?? Enumerable.Empty<string>()).Any())
+                            {
+                                <p class="mb-2 small text-muted">
+                                    <strong>Genres:</strong> @string.Join(", ", movie.Genres)
+                                </p>
+                            }
+
+                            @if ((movie.Subtitles ?? Enumerable.Empty<string>()).Any())
+                            {
+                                <p class="mb-2 small text-muted">
+                                    <strong>Subtitles:</strong> @string.Join(", ", movie.Subtitles)
+                                </p>
+                            }
+
+
+                            @if (movie.Rating > 0)
+                            {
+                                <p class="mb-3 small">⭐ @movie.Rating / 10</p>
+                            }
+
+                            <div class="mt-auto d-flex justify-content-between gap-2">
+                                <a asp-controller="Details"
+                                   asp-route-name="@movie.Title"
+                                   class="btn btn-outline-primary w-50">Details</a>
+
+                                @if (!string.IsNullOrWhiteSpace(movie.TrailerUrl))
+                                {
+                                    <a href="@movie.TrailerUrl"
+                                       target="_blank"
+                                       class="btn btn-danger w-50">▶ Trailer</a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-secondary w-50" disabled>Trailer</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Optional: Add some custom styling -->
+<style>
+    body {
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                    url('/images/mountains.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+</style>
