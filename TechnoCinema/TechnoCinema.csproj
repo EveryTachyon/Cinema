@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Home\Banne.cshtml" />
+    <Content Remove="Views\Home\Banner.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Home\Banne.cshtml" />
+    <None Include="Views\Home\Banner.cshtml" />
   </ItemGroup>
 
 </Project>

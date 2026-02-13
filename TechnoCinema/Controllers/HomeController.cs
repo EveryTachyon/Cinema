@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using TechnoCinema.Data;
 using TechnoCinema.Models;
+
 
 public class HomeController : Controller
 {
@@ -12,6 +14,18 @@ public class HomeController : Controller
         _context = context;
     }
 
+    public async Task<IActionResult> Banner()
+    {
+        var banners = await _context.Banners.ToListAsync();
+        return View(banners); // do not put a path, just View()
+    }
+
+
+
+    public IActionResult Edit()
+    {
+        return View();
+    }
     // Home page: show banners
     public IActionResult Index()
     {
