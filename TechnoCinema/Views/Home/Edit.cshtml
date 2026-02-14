@@ -1,32 +1,31 @@
 ﻿@model TechnoCinema.Models.Banner
 
+<h2>Edit Banner</h2>
+
 <form asp-action="Edit" method="post">
-    <!-- REQUIRED for editing -->
     <input type="hidden" asp-for="Id" />
 
-    <div class="form-group">
-        <label>Name</label>
+    <div class="mb-3">
+        <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label>ImageUrl</label>
-        <input asp-for="ImageUrl" type="date" class="form-control" />
+    <div class="mb-3">
+        <label asp-for="ImageUrl"></label>
+        <input asp-for="ImageUrl" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label>TargetUrl</label>
-        <input asp-for="TargetUrl" class="form-control" />
+
+    <div class="mb-3">
+        <label asp-for="Position"></label>
+        <input asp-for="Position" class="form-control" type="number" />
     </div>
 
-    <div class="form-group">
-        <label>Position</label>
-        <input asp-for="Position" class="form-control" />
-    </div>
+    <button type="submit" class="btn btn-primary">
+        Save
+    </button>
 
-    <button type="submit" class="btn btn-success mt-3">Salvesta muudatused</button>
-
-    <a asp-action="Index" class="btn btn-secondary mt-3">Tagasi</a>
-
+    <a asp-action="Banner" class="btn btn-secondary">
+        Back
+    </a>
 </form>
-

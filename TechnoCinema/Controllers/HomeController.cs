@@ -14,20 +14,47 @@ public class HomeController : Controller
         _context = context;
     }
 
+
     public async Task<IActionResult> Banner()
     {
-        var banners = await _context.Banners.ToListAsync();
-        return View(banners); // do not put a path, just View()
+        var banners = await _context.Banners
+            .OrderBy(b => b.Position)
+            .ToListAsync();
+
+        return View(banners);
     }
 
 
 
-    public IActionResult Edit()
+
+    //  gives data do Edit Banner
+    public async Task<IActionResult> Edit(int id)
     {
-        return View();
+        var banner = await _context.Banners.FindAsync(id);
+
+        if (banner == null)
+            return NotFound();
+
+        return View(banner);
     }
-    // Home page: show banners
-    public IActionResult Index()
+
+    //  Edit the Banner data 
+    [HttpPost]
+    public async Task<IActionResult> Edit(Banner banner)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Update(banner);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Banner));
+        }
+
+        return View(banner);
+    }
+
+
+// Home page: show banners
+public IActionResult Index()
     {
         var banners = _context.Banners.OrderBy(b => b.Position).ToList();
         return View(banners);
