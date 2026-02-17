@@ -7,7 +7,7 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public string Rank { get; set; }
-        public int spent { get; set; }
+        public int spent { get; set; } = 0;
 
 
 
