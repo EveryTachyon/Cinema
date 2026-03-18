@@ -1,16 +1,17 @@
 ﻿@{
     ViewData["Title"] = "Login";
 }
+<h2>Lisa uus seanss</h2>
 
 <link rel="stylesheet" href="~/css/user.css" />
 
 <div class="form-container">
     <h2>Login</h2>
 
-    <form method="post">
+    <form method="post" action="/User/Login">
         <input name="email" placeholder="Email" required />
         <input name="password" type="password" placeholder="Password" required />
-        <button type="submit">Login</button>
+        <button type="Seansiajad">Login</button>
     </form>
 
     @if (ViewBag.Error != null)

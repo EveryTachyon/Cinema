@@ -2,32 +2,53 @@
 using TechnoCinema.Data;
 using TechnoCinema.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 
 namespace TechnoCinema.Controllers
 {
     public class UserController : Controller
     {
-        private readonly TechnoCinemaContext _context;
+        private readonly ApplicationDbContext _context;
+        private readonly PasswordHasher<User> _hasher;
 
-        public UserController(TechnoCinemaContext context)
+        public UserController(ApplicationDbContext context)
         {
             _context = context;
+            _hasher = new PasswordHasher<User>();
         }
 
-        // REGISTER
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(User user)
+        [ValidateAntiForgeryToken]
+        public IActionResult Register(User user, string password)
         {
+            if (!ModelState.IsValid)
+                return View(user);
+
+            if (string.IsNullOrEmpty(password))
+            {
+                ViewBag.Error = "Password is required";
+                return View(user);
+            }
+
+            user.Email = user.Email.ToLower();
+
             if (_context.Users.Any(u => u.Email == user.Email))
             {
                 ViewBag.Error = "Email already exists";
-                return View();
+                return View(user);
             }
+
+            user.PasswordHash = _hasher.HashPassword(user, password);
 
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -37,22 +58,25 @@ namespace TechnoCinema.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // LOGIN
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Login(string email, string password)
         {
             var user = _context.Users
-                .FirstOrDefault(u => u.Email == email && u.Password == password);
+                .FirstOrDefault(u => u.Email == email.ToLower());
 
             if (user == null)
             {
                 ViewBag.Error = "Invalid email or password";
-                return View();
+                return View("Login");
+            }
+
+            var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
+
+            if (result == PasswordVerificationResult.Failed)
+            {
+                ViewBag.Error = "Invalid email or password";
+                return View("Login");
             }
 
             HttpContext.Session.SetInt32("UserId", user.Id);
@@ -60,7 +84,6 @@ namespace TechnoCinema.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // LOGOUT
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

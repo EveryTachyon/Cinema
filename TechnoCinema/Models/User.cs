@@ -1,15 +1,23 @@
-﻿namespace TechnoCinema.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TechnoCinema.Models
 {
     public class User
     {
         public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
+
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
-        public string Password { get; set; }
+
+        [Required]
+        public string PasswordHash { get; set; }
+
         public string Rank { get; set; }
-        public int spent { get; set; } = 0;
 
-
-
+        public int Spent { get; set; } = 0;
     }
 }

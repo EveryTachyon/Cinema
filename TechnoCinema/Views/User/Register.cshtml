@@ -5,13 +5,13 @@
 <link rel="stylesheet" href="~/css/user.css" />
 
 <div class="form-container">
-    <h2>Create Account</h2>
+    <h2>Register</h2>
 
-    <form method="post">
-        <input name="Name" placeholder="Full Name" required />
+    <form method="post" action="/User/Register">
+        <input name="Name" placeholder="Name" required />
         <input name="Email" placeholder="Email" required />
-        <input name="Password" type="password" placeholder="Password" required />
-        <button type="submit">Register</button>
+        <input name="password" type="password" placeholder="Password" required />
+        <button type="Login">Register</button>
     </form>
 
     @if (ViewBag.Error != null)
@@ -23,4 +23,4 @@
         Already have an account?
         <a href="/User/Login">Login</a>
     </p>
-</div>
+</div>+´123 v
