@@ -5,7 +5,7 @@
 
 
 # How to start 
-Run it idk 
+
 
 
 # 101 of the code 
