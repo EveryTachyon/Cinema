@@ -1,4 +1,4 @@
-# Frieren-cinema
+# cinema
 
 
 # What u need to run 
