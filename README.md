@@ -3,7 +3,9 @@
 
 # What u need to run 
 Framework net8.0
+
 MySqlConnector Version2.5.0
+
 EntityFrameworkCore Version8.0.22
  
 # How to start 
