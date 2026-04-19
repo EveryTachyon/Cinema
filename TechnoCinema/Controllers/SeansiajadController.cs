@@ -45,23 +45,27 @@ public class SeansiajadController : Controller
         return View(seans);
     }
 
-    // LIST ALL SHOWTIMES the white death 
-    //Andmete jagamine lehtedeks, andmete kuvamine lehtedena, pager view component its 0245 and idk how it is 
-    public IActionResult Index(string kino = "", string searchString = "", int page = 1)
+    // LIST ALL SHOWTIMES 
+    //Andmete jagamine lehtedeks, andmete kuvamine lehtedena, pager view component 
+    public IActionResult Index(List<string> kino, string searchString = "", int page = 1)
     {
-        // HARD-CODED kino locations
-        var kinod = new List<string> { "Tallinn", "Tartu", "Pärnu", "Saaremaa", "Narva", "Jõhvi" };
+        // GET ALL KINOS FROM DATABASE (no hardcoding)
+        var kinod = _context.Showtimes
+            .Select(s => s.KinoNimi)
+            .Distinct()
+            .ToList();
+
         ViewBag.Kinod = kinod;
-        ViewBag.SelectedKino = kino;
+        ViewBag.SelectedKinod = kino;
         ViewBag.SearchString = searchString;
 
-        // Base query
+        // BASE QUERY (ALL DATA FIRST)
         var query = _context.Showtimes.AsQueryable();
 
         // Filter by kino
-        if (!string.IsNullOrEmpty(kino))
+        if (kino != null && kino.Count > 0 && !kino.Contains(""))
         {
-            query = query.Where(s => s.KinoNimi == kino);
+            query = query.Where(s => kino.Contains(s.KinoNimi));
         }
 
         // Filter by film search
@@ -70,9 +74,11 @@ public class SeansiajadController : Controller
             query = query.Where(s => s.Film.StartsWith(searchString));
         }
 
+        // TOTAL COUNT (BEFORE PAGING)
+        int totalItems = query.Count();
+
         // Pagination
         int pageSize = 5;
-        int totalItems = query.Count();
         var seansid = query
             .OrderBy(s => s.ReleaseDate)
             .Skip((page - 1) * pageSize)
