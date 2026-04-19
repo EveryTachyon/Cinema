@@ -18,7 +18,7 @@ public class SeansiajadControllerTests
 
         var context = new ApplicationDbContext(options);
 
-        // Seed data
+     
         context.Showtimes.AddRange(new List<Showtime>
         {
             new Showtime { Id = 1, Film = "Avatar", KinoNimi = "Tallinn", ReleaseDate = DateTime.Now },

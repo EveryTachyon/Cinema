@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net.Sockets;
 using TechnoCinema.Data;
 using TechnoCinema.Models;
-using Xunit;
 
 public class BuyControllerTests
 {
@@ -19,7 +18,6 @@ public class BuyControllerTests
 
         var context = new ApplicationDbContext(options);
 
-        // Seed test data
         var room = new Room
         {
             Id = 1,
@@ -105,7 +103,6 @@ public class BuyControllerTests
     {
         var context = GetDbContext();
 
-        // Add existing ticket
         var room = context.Rooms.Include(r => r.Seats).First();
         var movie = context.Movies.First();
 
