@@ -2,6 +2,13 @@
 
 <h2>Banner List</h2>
 
+<!-- ADD NEW BANNER BUTTON -->
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary">
+         Add New Banner
+    </a>
+</div>
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -9,17 +16,23 @@
             <th>Name</th>
             <th>Image</th>
             <th>Position</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var banner in Model)
         {
             <tr>
-                
+                <td>@banner.Id</td>
+
                 <td>@banner.Name</td>
 
-                <td><img src="@banner.ImageUrl" width="150" /></td>
+                <td>
+                    <img src="@banner.ImageUrl" width="150" />
+                </td>
+
+                <td>@banner.Position</td>
 
                 <td>
                     <a asp-action="Edit"
@@ -28,7 +41,10 @@
                         Edit
                     </a>
                 </td>
+
             </tr>
+
+
         }
     </tbody>
 </table>
