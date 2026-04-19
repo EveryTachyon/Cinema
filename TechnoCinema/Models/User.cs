@@ -19,5 +19,7 @@ namespace TechnoCinema.Models
         public string Rank { get; set; }
 
         public int Spent { get; set; } = 0;
+
+        public string Role { get; set; } // "Admin" or "User"
     }
 }
