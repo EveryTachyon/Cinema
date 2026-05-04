@@ -17,7 +17,7 @@ public class SeansiajadControllerTests
 
         return new ApplicationDbContext(options);
     }
-    // ─── CREATE ────────────────────────────────────────
+    //  CREATE 
 
     [Fact]
     public void Create_ValidModel_Redirects()
@@ -52,8 +52,7 @@ public class SeansiajadControllerTests
         Assert.NotNull(result);
     }
 
-    // ─── EDIT ─────────────────────────────────────────
-
+    //  EDIT 
     [Fact]
     public void Edit_Get_ReturnsView_WhenExists()
     {
@@ -78,7 +77,7 @@ public class SeansiajadControllerTests
         Assert.IsType<NotFoundResult>(result);
     }
 
-    // ─── OSTA PILETID ────────────────────────────────
+    //  OSTA PILETID 
 
     [Fact]
     public void OstaPiletid_ReturnsView_WhenExists()

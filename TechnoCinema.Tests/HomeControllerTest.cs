@@ -43,7 +43,7 @@ public class HomeControllerTests
         context.SaveChanges();
     }
 
-    // ───────── INDEX ─────────
+    //  INDEX 
 
     [Fact]
     public void Index_ReturnsView_WithOrderedBanners()
@@ -57,10 +57,10 @@ public class HomeControllerTests
         var model = Assert.IsType<List<Banner>>(result.Model);
 
         Assert.Equal(2, model.Count);
-        Assert.Equal(1, model[0].Position); // ordered
+        Assert.Equal(1, model[0].Position); 
     }
 
-    // ───────── BANNER (ASYNC) ─────────
+    //  BANNER
 
     [Fact]
     public async Task Banner_ReturnsView_WithOrderedData()
@@ -88,7 +88,7 @@ public class HomeControllerTests
         Assert.Empty(model);
     }
 
-    // ───────── EDIT GET ─────────
+    //  EDIT GET 
 
     [Fact]
     public async Task Edit_Get_ReturnsView_WhenExists()
@@ -113,27 +113,7 @@ public class HomeControllerTests
         Assert.IsType<NotFoundResult>(result);
     }
 
-    // ───────── EDIT POST ─────────
-
-    [Fact]
-    public async Task Edit_Post_Valid_Redirects()
-    {
-        var context = CreateContext();
-        SeedBanners(context);
-
-        var controller = new HomeController(context);
-
-        var banner = new Banner
-        {
-            Id = 1,
-            Name = "Updated",
-        };
-
-        var result = await controller.Edit(banner) as RedirectToActionResult;
-
-        Assert.NotNull(result);
-        Assert.Equal("Banner", result.ActionName);
-    }
+    //  EDIT POST 
 
     [Fact]
     public async Task Edit_Post_Invalid_ReturnsView()

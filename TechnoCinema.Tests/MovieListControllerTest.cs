@@ -48,7 +48,7 @@ public class MovieListControllerTests
         context.SaveChanges();
     }
 
-    // ───────── INDEX ─────────
+    //  INDEX 
 
     [Fact]
     public void Index_ReturnsView()
