@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+<h2>Lisa uus seanss</h2>
+
+<link rel="stylesheet" href="~/css/user.css" />
+
+<div class="form-container">
+    <h2>Login</h2>
+
+    <form method="post" action="/User/Login">
+        <input name="email" placeholder="Email" required />
+        <input name="password" type="password" placeholder="Password" required />
+        <button type="Seansiajad">Login</button>
+    </form>
+
+    @if (ViewBag.Error != null)
+    {
+        <p class="error">@ViewBag.Error</p>
+    }
+
+    <p>
+        No account?
+        <a href="/User/Register">Register</a>
+    </p>
+</div>
+
+<style>
+
+    body {
+        background-image: url('/images/seansback.jpg');
+        background-size: cover; /* cover the entire viewport */
+        background-position: center; /* center the image */
+        background-repeat: no-repeat; /* don’t tile */
+        background-attachment: fixed; /* keeps it fixed when scrolling */
+        font-family: Arial, sans-serif; /* optional styling */
+    }
+
+</style>

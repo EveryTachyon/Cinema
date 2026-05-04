@@ -32,8 +32,10 @@
                                     ? ViewBag.KinoCounts[kino]
                                     : 0)
             </span>
-        </a>
+
+            </a>
                 }
+                
     </div>
 <!-- do the seans and the creat html and CSS good do views -->
 <div class="row">
@@ -99,22 +101,65 @@
 </div>
 
 
-222
-
 
     <style>
         .layout {
             display: flex;
         }
 
+     
+        /* SIDEBAR */
         .kino-sidebar {
             width: 260px;
             background: #0f0f0f;
-            padding: 20px;
-       
-        
+            padding: 15px;
+            border-radius: 8px;
+            /* sticky filter sidebar */
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
+        /* ITEMS */
+        .kino-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 6px;
+            background: #1a1a1a;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+
+            .kino-item:hover {
+                background: #2a2a2a;
+            }
+
+            /* ACTIVE FILTER */
+            .kino-item.active {
+                background: #ff8c00;
+                color: black;
+                font-weight: bold;
+            }
+
+        /* COUNT BADGE */
+        .count {
+            background: #333;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+
+        /* MAIN AREA */
+        .row {
+            flex: 1;
+        }
             .kino-item:hover {
                 background: #1f1f1f;
             }

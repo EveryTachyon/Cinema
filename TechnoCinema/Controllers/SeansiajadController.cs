@@ -43,36 +43,50 @@ public class SeansiajadController : Controller
             return NotFound();
 
         return View(seans);
-    }
+    }   
 
-    // LIST ALL SHOWTIMES the white death 
-    //Andmete jagamine lehtedeks, andmete kuvamine lehtedena, pager view component its 0245 and idk how it is 
-    public IActionResult Index(string kino = "", string searchString = "", int page = 1)
+    // LIST ALL SHOWTIMES 
+    //Andmete jagamine lehtedeks, andmete kuvamine lehtedena, pager view component 
+    public IActionResult Index(List<string> kino, string searchString = "", int page = 1)
     {
-        // HARD-CODED kino locations
-        var kinod = new List<string> { "Tallinn", "Tartu", "Pärnu", "Saaremaa", "Narva", "Jõhvi" };
+        // ALL CINEMAS (cleaned + no nulls)
+        var kinod = _context.Showtimes
+            .Where(s => s.KinoNimi != null && s.KinoNimi.Trim() != "")
+            .Select(s => s.KinoNimi.Trim())
+            .Distinct()
+            .OrderBy(k => k)
+            .ToList();
+
         ViewBag.Kinod = kinod;
-        ViewBag.SelectedKino = kino;
+        ViewBag.SelectedKinod = kino ?? new List<string>();
         ViewBag.SearchString = searchString;
 
-        // Base query
+        // BASE QUERY
         var query = _context.Showtimes.AsQueryable();
 
-        // Filter by kino
-        if (!string.IsNullOrEmpty(kino))
+        // FIX: kino filter (safe null + trim)
+        if (kino != null && kino.Any(k => !string.IsNullOrWhiteSpace(k)))
         {
-            query = query.Where(s => s.KinoNimi == kino);
+            var cleanKino = kino
+                .Where(k => !string.IsNullOrWhiteSpace(k))
+                .Select(k => k.Trim())
+                .ToList();
+
+            query = query.Where(s => s.KinoNimi != null && cleanKino.Contains(s.KinoNimi.Trim()));
         }
 
-        // Filter by film search
-        if (!string.IsNullOrEmpty(searchString))
+        // SEARCH FILTER
+        if (!string.IsNullOrWhiteSpace(searchString))
         {
             query = query.Where(s => s.Film.StartsWith(searchString));
         }
 
-        // Pagination
-        int pageSize = 5;
+        // COUNT
         int totalItems = query.Count();
+
+        // PAGING
+        int pageSize = 5;
+
         var seansid = query
             .OrderBy(s => s.ReleaseDate)
             .Skip((page - 1) * pageSize)
@@ -82,10 +96,12 @@ public class SeansiajadController : Controller
         ViewBag.CurrentPage = page;
         ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-        // Count of seansid per kino
+        // COUNT PER KINO (cleaned same way)
         var kinoCounts = _context.Showtimes
-            .GroupBy(s => s.KinoNimi)
+            .Where(s => s.KinoNimi != null && s.KinoNimi.Trim() != "")
+            .GroupBy(s => s.KinoNimi.Trim())
             .ToDictionary(g => g.Key, g => g.Count());
+
         ViewBag.KinoCounts = kinoCounts;
 
         return View(seansid);
