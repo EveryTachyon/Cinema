@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechnoCinema.Models;  // Make sure this is the namespace where your models are located
-
+using System.Text.Json;
 namespace TechnoCinema.Data
 {
     public class ApplicationDbContext : DbContext
@@ -18,9 +19,30 @@ namespace TechnoCinema.Data
         public DbSet<Showtime> Showtimes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
-    
 
-         public override int SaveChanges()
+        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            var converter = new ValueConverter<List<string>, string>(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>());
+
+            modelBuilder.Entity<Movie>()
+                .Property(e => e.Genres)
+                .HasConversion(converter);
+
+            modelBuilder.Entity<Movie>()
+                .Property(e => e.Subtitles)
+                .HasConversion(converter);
+        }
+
+
+      
+
+        public override int SaveChanges()
         {
             var entries = ChangeTracker.Entries<Showtime>();
 
