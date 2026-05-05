@@ -39,7 +39,7 @@ public class BuyControllerTests
         {
             Id = 1,
             Film = "Avatar",
-            Saal = 1,
+            Room = 1,
             ReleaseDate = DateTime.Now
         };
 
@@ -74,7 +74,7 @@ public class BuyControllerTests
         {
             Id = 1,
             Film = "Avatar",
-            Saal = 999
+            Room = 999
         });
         context.SaveChanges();
 

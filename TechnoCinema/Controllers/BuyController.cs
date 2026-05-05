@@ -22,12 +22,12 @@ public class BuyController : Controller
 
         var room = _context.Rooms
             .Include(r => r.Seats)
-            .FirstOrDefault(r => r.Id == showtime.Saal);
+            .FirstOrDefault(r => r.Id == showtime.Room);
         if (room == null) return NotFound();
 
         // Get booked seats for this showtime from Tickets
         var bookedSeatCodes = _context.Tickets
-            .Where(t => t.Movie.Title == showtime.Film && t.Room.Id == showtime.Saal)
+            .Where(t => t.Movie.Title == showtime.Film && t.Room.Id == showtime.Room)
             .SelectMany(t => t.Seats.Select(s => $"{(char)('A' + s.Row)}{s.Column}"))
             .ToList();
 
@@ -47,12 +47,12 @@ public class BuyController : Controller
 
         var room = _context.Rooms
             .Include(r => r.Seats)
-            .FirstOrDefault(r => r.Id == showtime.Saal);
+            .FirstOrDefault(r => r.Id == showtime.Room);
         if (room == null) return NotFound();
 
         // Clear old tickets for this showtime (movie + room)
         var oldTickets = _context.Tickets
-            .Where(t => t.Movie.Title == showtime.Film && t.Room.Id == showtime.Saal);
+            .Where(t => t.Movie.Title == showtime.Film && t.Room.Id == showtime.Room);
         _context.Tickets.RemoveRange(oldTickets);
 
         // Find actual Seat entities from selected seat codes (A1, B2, etc.)
@@ -86,7 +86,7 @@ public class BuyController : Controller
 
         // Remove all tickets for this showtime (movie + room)
         var tickets = _context.Tickets
-            .Where(t => t.Movie.Title == showtime.Film && t.Room.Id == showtime.Saal);
+            .Where(t => t.Movie.Title == showtime.Film && t.Room.Id == showtime.Room);
         _context.Tickets.RemoveRange(tickets);
         _context.SaveChanges();
 
