@@ -1,132 +1,104 @@
-﻿using Xunit;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
+using TechnoCinema.Controllers;
 using TechnoCinema.Data;
 using TechnoCinema.Models;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 public class HomeControllerTests
 {
-    private ApplicationDbContext CreateContext()
+    private ApplicationDbContext GetDbContext()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-
         return new ApplicationDbContext(options);
     }
 
-    private void SeedBanners(ApplicationDbContext context)
+    private Banner MakeBanner(int id, int position) => new Banner
     {
-        context.Banners.AddRange(
-            new Banner
-            {
-                Id = 1,
-                Name = "Banner1",
-                Position = 2,
-                ImageUrl = "img1.jpg",
-                TargetUrl = "https://test1.com"
-            },
-            new Banner
-            {
-                Id = 2,
-                Name = "Banner2",
-                Position = 1,
-                ImageUrl = "img2.jpg",
-                TargetUrl = "https://test2.com"
-            }
+        Id = id,
+        Position = position,
+        Name = "Test Banner",
+        ImageUrl = "/img/test.jpg",
+        TargetUrl = "/test"
+    };
+
+    [Fact]
+    public async Task Banner_ReturnsViewWithBannersOrderedByPosition()
+    {
+        var db = GetDbContext();
+        db.Banners.AddRange(
+            MakeBanner(1, 3),
+            MakeBanner(2, 1),
+            MakeBanner(3, 2)
         );
+        await db.SaveChangesAsync();
 
-        context.SaveChanges();
-    }
-
-    //  INDEX 
-
-    [Fact]
-    public void Index_ReturnsView_WithOrderedBanners()
-    {
-        var context = CreateContext();
-        SeedBanners(context);
-
-        var controller = new HomeController(context);
-
-        var result = controller.Index() as ViewResult;
-        var model = Assert.IsType<List<Banner>>(result.Model);
-
-        Assert.Equal(2, model.Count);
-        Assert.Equal(1, model[0].Position); 
-    }
-
-    //  BANNER
-
-    [Fact]
-    public async Task Banner_ReturnsView_WithOrderedData()
-    {
-        var context = CreateContext();
-        SeedBanners(context);
-
-        var controller = new HomeController(context);
-
+        var controller = new HomeController(db);
         var result = await controller.Banner() as ViewResult;
-        var model = Assert.IsType<List<Banner>>(result.Model);
+        var model = result!.Model as List<Banner>;
 
-        Assert.Equal(2, model.Count);
-        Assert.Equal(1, model.First().Position);
+        Assert.NotNull(result);
+        Assert.Equal(3, model!.Count);
+        Assert.Equal(1, model[0].Position);
     }
 
     [Fact]
-    public async Task Banner_Empty_ReturnsEmptyList()
+    public async Task Edit_Get_ReturnsNotFound_WhenBannerMissing()
     {
-        var controller = new HomeController(CreateContext());
-
-        var result = await controller.Banner() as ViewResult;
-        var model = Assert.IsType<List<Banner>>(result.Model);
-
-        Assert.Empty(model);
-    }
-
-    //  EDIT GET 
-
-    [Fact]
-    public async Task Edit_Get_ReturnsView_WhenExists()
-    {
-        var context = CreateContext();
-        SeedBanners(context);
-
-        var controller = new HomeController(context);
-
-        var result = await controller.Edit(1);
-
-        Assert.IsType<ViewResult>(result);
-    }
-
-    [Fact]
-    public async Task Edit_Get_ReturnsNotFound_WhenMissing()
-    {
-        var controller = new HomeController(CreateContext());
+        var db = GetDbContext();
+        var controller = new HomeController(db);
 
         var result = await controller.Edit(999);
 
         Assert.IsType<NotFoundResult>(result);
     }
 
-    //  EDIT POST 
-
     [Fact]
-    public async Task Edit_Post_Invalid_ReturnsView()
+    public async Task Edit_Get_ReturnsViewWithBanner_WhenFound()
     {
-        var context = CreateContext();
-        var controller = new HomeController(context);
+        var db = GetDbContext();
+        db.Banners.Add(MakeBanner(1, 1));
+        await db.SaveChangesAsync();
 
-        controller.ModelState.AddModelError("Title", "Required");
-
-        var banner = new Banner();
-
-        var result = await controller.Edit(banner) as ViewResult;
+        var controller = new HomeController(db);
+        var result = await controller.Edit(1) as ViewResult;
 
         Assert.NotNull(result);
+        Assert.IsType<Banner>(result!.Model);
+    }
+
+    [Fact]
+    public async Task Edit_Post_RedirectsToBanner_WhenModelValid()
+    {
+        var db = GetDbContext();
+        db.Banners.Add(MakeBanner(1, 1));
+        await db.SaveChangesAsync();
+
+        var controller = new HomeController(db);
+        var updated = MakeBanner(1, 5);
+        var result = await controller.Edit(updated) as RedirectToActionResult;
+
+        Assert.NotNull(result);
+        Assert.Equal("Banner", result!.ActionName);
+    }
+
+    [Fact]
+    public void Index_ReturnsViewWithBanners()
+    {
+        var db = GetDbContext();
+        db.Banners.AddRange(
+            MakeBanner(1, 2),
+            MakeBanner(2, 1)
+        );
+        db.SaveChanges();
+
+        var controller = new HomeController(db);
+        var result = controller.Index() as ViewResult;
+        var model = result!.Model as List<Banner>;
+
+        Assert.NotNull(result);
+        Assert.Equal(2, model!.Count);
+        Assert.Equal(1, model[0].Position);
     }
 }

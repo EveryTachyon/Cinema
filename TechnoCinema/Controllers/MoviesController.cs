@@ -39,5 +39,25 @@ namespace TechnoCinema.Controllers
 
             return View(movie);
         }
+        // GET: /Movies/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        // POST: /Movies/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Movie movie)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Movies.Add(movie);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "Movie added successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(movie);
+        }
     }
 }
