@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 // Vabu kohti arvutab showtime.room.maxseats - showtime.tickets
 // tickets sees eemalda roomid ja movieid vaid hoopis showtime.id
 
-//Frieren the boooomm data 
 namespace TechnoCinema.Models
 {
     public class Showtime

@@ -125,7 +125,7 @@ public class SeansiajadController : Controller
     public IActionResult EditedList()
     {
         var seansid = _context.Showtimes
-            .OrderByDescending(s => s.ModifiedAt)
+            .OrderByDescending(s => s.ModifiedAt)                                                                                                       
             .ToList();
 
         return View("EditedList", seansid);
