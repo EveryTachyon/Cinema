@@ -1,8 +1,6 @@
 ﻿@model IEnumerable<TechnoCinema.Models.Movie>
 @using System.Collections.Generic
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@removeTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
 @{
     // Get data from ViewData
     var searchTitle = ViewData["SearchTitle"] as string ?? "";
@@ -82,15 +80,14 @@
     };
 }
 
-<select name="sortBy" class="form-select" asp-items="null">
-    @foreach (var opt in options)
-    {
-        <option value="@opt.value" 
-            @if(sortBy == opt.value){<text>selected</text>}>
-            @opt.text
-        </option>
-    }
-</select>
+            <select name="sortBy" class="form-select">
+                @foreach (var opt in options)
+                {
+                    <option value="@opt.value" selected="@(sortBy == opt.value)">
+                        @opt.text
+                    </option>
+                }
+            </select>
 
     </div>
 
@@ -160,9 +157,13 @@
                             }
 
                             <div class="mt-auto d-flex justify-content-between gap-2">
-                                <a asp-controller="Details"
-                                   asp-route-name="@movie.Title"
-                                   class="btn btn-outline-primary w-50">Details</a>
+                                <a asp-controller="Movies"
+                                   asp-action="Details"
+                                   asp-route-id="@movie.Id"
+                                   class="btn btn-outline-primary w-50">
+                                    Details
+                                </a>
+
 
                                 @if (!string.IsNullOrWhiteSpace(movie.TrailerUrl))
                                 {
@@ -186,11 +187,10 @@
 <!-- Optional: Add some custom styling -->
 <style>
     body {
-        background-image: url('/images/seansback.jpg');
-        background-size: cover; /* cover the entire viewport */
-        background-position: center; /* center the image */
-        background-repeat: no-repeat; /* don’t tile */
-        background-attachment: fixed; /* keeps it fixed when scrolling */
-        font-family: Arial, sans-serif; /* optional styling */
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                    url('/images/mountains.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
     }
 </style>

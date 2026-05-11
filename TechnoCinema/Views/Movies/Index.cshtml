@@ -1,0 +1,173 @@
+﻿@model TechnoCinema.Models.Movie
+@{
+    var showtimes = ViewBag.Showtimes as List<TechnoCinema.Models.Showtime> ?? new List<TechnoCinema.Models.Showtime>();
+}
+
+<div class="container py-5">
+
+    <!-- Movie Hero Section -->
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-4 text-center mb-3 mb-md-0">
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" class="img-fluid rounded shadow-lg" alt="@Model.Title poster" style="max-height: 550px; object-fit: cover;" />
+            }
+        </div>
+        <div class="col-md-8">
+            <h1 class="display-4 fw-bold text-white bg-dark p-2 rounded">@Model.Title</h1>
+            <div class="mb-3">
+                <span class="badge bg-primary me-2">⏱ @(Model.DurationSeconds / 60) min</span>
+                <span class="badge bg-secondary me-2">@Model.AgeRating</span>
+                <span class="badge bg-info text-dark me-2">@Model.Language</span>
+                <span class="badge bg-warning text-dark">⭐ @Model.Rating / 10</span>
+            </div>
+
+            <p class="text-white"><strong>Genres:</strong> @string.Join(", ", Model.Genres)</p>
+            <p class="text-white"><strong>Subtitles:</strong> @string.Join(", ", Model.Subtitles)</p>
+
+            @if (!string.IsNullOrWhiteSpace(Model.TrailerUrl))
+            {
+                <div class="mt-4">
+                    <h5 class="text-white">Trailer</h5>
+                    <div class="ratio ratio-16x9 shadow-sm rounded" style="max-width: 400px;">
+                        <iframe src="@Model.TrailerUrl.Replace("watch?v=", "embed/")"
+                                frameborder="0"
+                                allowfullscreen
+                                title="Trailer for @Model.Title">
+                        </iframe>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <hr class="my-5 border-light" />
+
+    <!-- Showtimes Section -->
+    <h2 class="mb-4 text-white">Seansiajad</h2>
+
+    @if (showtimes.Any())
+    {
+        <div class="row g-4">
+            @foreach (var s in showtimes)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card seans-card h-100">
+                        <div class="card-header text-center">
+                            @s.KinoNimi
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <h3 class="mb-2">@s.ReleaseDate.ToString("HH:mm")</h3>
+                                <p class="mb-1"><strong>Saal:</strong> @s.Saal</p>
+                                <p class="mb-1"><strong>Format:</strong> @s.Formaat</p>
+                                <p class="mb-1"><strong>Language:</strong> @s.Keel</p>
+                                <p class="mb-1"><strong>Subtitles:</strong> @s.Subtiitrid</p>
+                                <p class="mb-1">
+                                    <strong>Seats:</strong>
+                                    @if (s.VabuKohti > 20)
+                                    {
+                                        <span class="text-success fw-bold">@s.VabuKohti</span>
+                                    }
+                                    else if (s.VabuKohti > 5)
+                                    {
+                                        <span class="text-warning fw-bold">@s.VabuKohti</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger fw-bold">@s.VabuKohti</span>
+                                    }
+                                </p>
+                                <p class="text-dark"><small>@s.ReleaseDate.ToString("dd.MM.yyyy")</small></p>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <a asp-controller="Buy"
+                                   asp-action="Index"
+                                   asp-route-id="@s.Id"
+                                   class="btn btn-warning w-100 fw-bold">
+                                    Osta pileteid
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-orange">No showtimes available for this movie.</p>
+    }
+
+</div>
+
+<!-- Vibrant Seansajad Style -->
+<style>
+    body {
+        background-image: url('/images/seansback.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2, h3 {
+        color: #fff;
+    }
+
+    p, small {
+        color: #f1f1f1;
+    }
+
+    .seans-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        background-color: #fff;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .seans-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .seans-card .card-header {
+            background-color: #6a1b9a;
+            font-weight: bold;
+            color: white;
+            font-size: 1.2rem;
+            padding: 0.5rem;
+        }
+
+        .seans-card .card-body {
+            padding: 1rem;
+        }
+
+        .seans-card .btn-warning {
+            background-color: #f57c00;
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .seans-card h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #6a1b9a;
+        }
+
+        .seans-card p, .seans-card span {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+    iframe {
+        border-radius: 8px;
+    }
+
+    hr {
+        border-color: #fff;
+    }
+</style>
