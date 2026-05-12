@@ -36,7 +36,7 @@ app.MapControllerRoute(
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();   // creates DB + tables if they don't exist
+    //db.Database.Migrate();   // creates DB + tables if they don't exist
     // do NOT also use Migrate() if you want to avoid migrations
 }
 
