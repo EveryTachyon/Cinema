@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechnoCinema.Data;
 
@@ -11,9 +12,11 @@ using TechnoCinema.Data;
 namespace TechnoCinema.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260511204017_AddMovies")]
+    partial class AddMovies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,6 +102,7 @@ namespace TechnoCinema.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Language")
@@ -117,6 +121,7 @@ namespace TechnoCinema.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("TrailerUrl")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

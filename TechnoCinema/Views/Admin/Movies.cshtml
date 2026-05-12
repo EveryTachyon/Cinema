@@ -1,0 +1,128 @@
+﻿@model List<TechnoCinema.Models.Movie>
+
+<div class="container mt-4">
+    <h2>🎬 Admin — Manage Movies</h2>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <!-- ADD MOVIE FORM -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Add New Movie</div>
+        <div class="card-body">
+            <form asp-controller="Admin" asp-action="Movies" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Title</label>
+                        <input name="Title" class="form-control" required />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Language</label>
+                        <input name="Language" class="form-control" placeholder="e.g. English" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Duration (seconds)</label>
+                        <input name="DurationSeconds" type="number" class="form-control" placeholder="e.g. 7200 = 2hrs" />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Rating (0-10)</label>
+                        <input name="Rating" type="number" step="0.1" min="0" max="10" class="form-control" />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Age Rating</label>
+                        <select name="AgeRating" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option>G</option>
+                            <option>PG</option>
+                            <option>PG-13</option>
+                            <option>R</option>
+                            <option>NC-17</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Genres <small class="text-muted">(comma separated)</small></label>
+                        <input name="genres" class="form-control" placeholder="e.g. Action, Sci-Fi, Thriller" />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Subtitles <small class="text-muted">(comma separated)</small></label>
+                        <input name="subtitles" class="form-control" placeholder="e.g. English, Estonian, Russian" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        <label class="form-label">Image URL</label>
+                        <input name="ImageUrl" class="form-control" placeholder="https://..." />
+                    </div>
+                    <div class="col mb-3">
+                        <label class="form-label">Trailer URL</label>
+                        <input name="TrailerUrl" class="form-control" placeholder="https://youtube.com/..." />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Movie</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MOVIES LIST -->
+    <table class="table table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Poster</th>
+                <th>Title</th>
+                <th>Language</th>
+                <th>Duration</th>
+                <th>Genres</th>
+                <th>Subtitles</th>
+                <th>Age</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(movie.ImageUrl))
+                        {
+                            <img src="@movie.ImageUrl" alt="@movie.Title" style="height:60px; object-fit:cover;" />
+                        }
+                    </td>
+                    <td>@movie.Title</td>
+                    <td>@movie.Language</td>
+                    <td>@($"{movie.DurationSeconds / 3600}h {(movie.DurationSeconds % 3600) / 60}m")</td>
+                    <td>@string.Join(", ", movie.Genres)</td>
+                    <td>@string.Join(", ", movie.Subtitles)</td>
+                    <td>@movie.AgeRating</td>
+                    <td>⭐ @movie.Rating</td>
+                    <td>
+                        <form asp-controller="Admin" asp-action="DeleteMovie" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@movie.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Delete @movie.Title?')">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
