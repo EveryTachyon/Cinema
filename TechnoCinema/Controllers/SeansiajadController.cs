@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using TechnoCinema.Data;
 using TechnoCinema.Models;
 
@@ -17,7 +19,16 @@ public class SeansiajadController : Controller
     // GET: Create form
     public IActionResult Create()
     {
-        return View();
+        // Sorry Gunnar, ma oleks pidanud tegema ViewModeli
+        var model = new Showtime();
+        model.AvailableRooms = new List<SelectListItem>();
+        var rooms = _context.Rooms.ToList();
+        foreach (var room in rooms) {
+            model.AvailableRooms.Add(
+                new SelectListItem { Value = room.Id.ToString(), Text = room.Name.ToString() }
+            );
+        }
+        return View(model);
     }
 
     // POST: Create Showtime
@@ -88,6 +99,7 @@ public class SeansiajadController : Controller
         int pageSize = 5;
 
         var seansid = query
+            .Include(s => s.Room)
             .OrderBy(s => s.ReleaseDate)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
